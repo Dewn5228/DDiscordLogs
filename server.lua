@@ -2,29 +2,42 @@ lib.locale()
 
 local channels = {
   channel = 'webhooLink',
-  fix = 'https://discord.com/api/webhooks/1080237448396804117/bTpJGq7eR-g_DLgF-N_ywzetVpWK8dSTYFBRHGUMzuTwl5Yxb8TJD86O9ENEDFzMvC-2',
 }
+
+exports('SendLog', function(channel, color, tittle, message, isembed)
+  local webhookLink = channels[channel]
+  if not webhookLink then
+    print(locale('webhook_error'))
+    return
+  end
+  if isembed then
+    local embed = {
+      {
+        ["color"] = color,
+        ["title"] = "**" .. tittle .. "**",
+        ["description"] = message,
+        ["footer"] = {
+          ["text"] = "Made by Dewn",
+        },
+      }
+    }
+    RequestSendEmbedLog(webhookLink, tittle, embed)
+  else
+    message = '```' .. message .. '```'
+    RequestSendLog(webhookLink, message)
+  end
+end)
+
+function RequestSendEmbedLog(webhookLink, tittle, embed)
+  PerformHttpRequest(webhookLink, function(err, text, headers)
+  end, 'POST', json.encode({ username = tittle, embeds = embed }), { ['Content-Type'] = 'application/json' })
+end
 
 function RequestSendLog(webhookLink, message)
   PerformHttpRequest(webhookLink, function(err, text, headers)
   end, 'POST', json.encode({ content = message }), { ['Content-Type'] = 'application/json' })
 end
 
-function SendLog(channel, message, bool)
-  local webhookLink = channels[channel]
-  if not webhookLink then
-    print(locale('webhook_error'))
-    return
-  end
-  if bool then
-    message = '```prolog\n' .. message .. '\r```'
-    RequestSendLog(webhookLink, message)
-  else
-    message = '```prolog\n' .. message .. '\r```'
-    RequestSendLog(webhookLink, message)
-  end
-end
-
-function AddWebhook(channel, webhookLink)
+exports('AddWebhook', function(channel, webhookLink)
   channels[channel] = webhookLink
-end
+end)

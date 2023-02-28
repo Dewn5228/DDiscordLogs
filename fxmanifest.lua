@@ -9,11 +9,6 @@ server_scripts {
   'server.lua'
 }
 
-server_exports {
-  'Sendlog',
-  'AddWebhook'
-}
-
 shared_scripts {
   '@ox_lib/init.lua'
 }

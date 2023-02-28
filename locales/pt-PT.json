@@ -1,0 +1,3 @@
+{
+  "webhook_error" : "Log não enviado. Webhook não declarado correctamente ou nome de canal incorrecto. Por favor, verifique as definições do Webhook."
+}
